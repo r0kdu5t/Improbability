@@ -1,0 +1,35 @@
+:0
+  { RULE="Simple Hello responder." }
+## Respond to any message to hello@theatrix.org.nz
+#    with a Hello and Welcome return message.
+#       Tuesday 16 June 2015
+
+
+#SHELL=/bin/sh
+#LOGFILE=$HOME/procmail.log
+#VERBOSE=off
+
+FROM='Andrew Sands <andrew@theatrix.org.nz>'
+SUBJECT=`formail -zcxSubject:`
+
+:0 Whc: hello.lock
+* ^TO_hello@theatrix\.org\.nz
+* !^FROM_DAEMON
+* !^X-Loop: ${LOGNAME}@${HOST}
+#| formail -rD 8192 hello.cache
+
+  :0 ehc
+  | (formail -rI"Precedence: junk" \
+    -I"Subject: Hello from Theatrix dot Org dot NZ" \
+    -I"From: ${FROM}" \
+    -A"X-Loop: ${LOGNAME}@${HOST}" ; \
+    echo "" ; \
+    echo "Hello. Your message was received."; \
+    echo "" \
+  ) | $SENDMAIL -oi -t
+
+
+
+#File: $HOME/.vacation.message
+#File: $HOME/.signature
+
