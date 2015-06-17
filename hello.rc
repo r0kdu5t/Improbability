@@ -3,33 +3,78 @@
 ## Respond to any message to hello@theatrix.org.nz
 #    with a Hello and Welcome return message.
 #       Tuesday 16 June 2015
-
-
-#SHELL=/bin/sh
-#LOGFILE=$HOME/procmail.log
-#VERBOSE=off
-
 FROM='Andrew Sands <andrew@theatrix.org.nz>'
-SUBJECT=`formail -zcxSubject:`
 
 :0 Whc: hello.lock
 * ^TO_hello@theatrix\.org\.nz
 * !^FROM_DAEMON
 * !^X-Loop: ${LOGNAME}@${HOST}
-#| formail -rD 8192 hello.cache
-
+{
+  :0
+  { RULE="Send Hello message." }
   :0 ehc
-  | (formail -rI"Precedence: junk" \
+  | (formail -r -I"Precedence: junk" \
     -I"Subject: Hello from Theatrix dot Org dot NZ" \
     -I"From: ${FROM}" \
+    -A"X-Loop: andrew@theatrix.org.nz" \
     -A"X-Loop: ${LOGNAME}@${HOST}" ; \
     echo "" ; \
     echo "Hello. Your message was received."; \
     echo "" \
   ) | $SENDMAIL -oi -t
+}
 
+####> CUT BELOW HERE <####
+# Real simple responder?
+:0 h c
+* !^FROM_DAEMON
+* !^X-Loop: your@own.mail.address
+| (formail -r -I"Precedence: junk" \
+    -A"X-Loop: your@own.mail.address" ; \
+   echo "Mail received.") | $SENDMAIL -t
 
+# 2gmail - review for ideas?
+:0
+  { RULE="Forward email to Gmail account." }
 
-#File: $HOME/.vacation.message
-#File: $HOME/.signature
+#
+# If a message arrives with the Subject '<cmd-console/> FORWARDSTOP' then delete the file '.forwardmail',
+# therefore turning off mail forwarding.
+#
 
+:0 hi
+   * ^Subject: <cmd-console/> FORWARDSTOP
+   |/bin/rm -f $HOME/.forwardmail
+
+#
+# If a message arrives with the Subject '<cmd-console/> FORWARDGO' then create the file '.forwardmail',
+# therefore turning on mail forwarding.
+#
+
+:0 hi
+   * ^Subject: <cmd-console/> FORWARDGO
+   |/bin/touch $HOME/.forwardmail
+#
+#
+#
+SENDMAIL=/usr/sbin/sendmail
+FROM_=`formail -c -I"Reply-To:" -rt -xTo: \
+  | expand | sed -e 's/^[ ]*//g' -e 's/[ ]*$//g'`
+SUBJ_=`formail -xSubject: \
+       | expand | sed -e 's/^[ ]*//g' -e 's/[ ]*$//g'`
+
+# Make a copy of all email to my second address
+:0
+* ! ^X-Loop: andrew@theatrix\.org\.nz
+* $ !^From: theatrix\.mobile@gmail\.com
+*  ! ^FROM_DAEMON
+* ? test -r $HOME/.forwardmail
+{
+  :0
+  { RULE="OK to forward this message" }
+  :0c:${HOME}/procmail.lock
+  | formail -A"X-Loop: andrew@theatrix.org.nz" \
+    -I"X-message-flag: Mail forwarded by theatrixdotorgdotnz" \
+    -I"Subject: [autofwd] ${SUBJ_} " \
+    | ${SENDMAIL} -f"${FROM_}" theatrix.mobile@gmail.com
+}
