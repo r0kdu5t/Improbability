@@ -1,0 +1,217 @@
+# Sean's little sandbox.
+#
+# 20020619/0915 SBS		Updated with additional notes, added standard header
+#						extractions and defined ORGMAIL.
+# 20030424/2019 SBS		more header extractions
+# 20040511/1212 SBS		Added RELAYHOST extraction
+# 20041212/1124 SBS		Revised RELAYHOST to include original HOST
+#
+# Note: variables defined here (such as NL, AUTOREPLY, and the header 
+# extractions) should be mimic'd in your regular .procmailrc OR ELSE REMOVED
+# ENTIRELY from this sandbox -- these features have proven themselves nice to
+# have, but if they're not in your live .procmailrc, then having them here is
+# only going to set you up for problems if your tested scripts use them, and
+# then you deploy those scripts into your live filters without the benefit
+# of the supporting variables.
+# 
+# You might find it handy to Take some variable definitions and place them
+# in a separate file, which you can include here as well as into your
+# live .procmailrc, say, like so:
+#
+# INCLUDERC=$HOME/.procmail/variables.rc
+#
+# Doing so would make your test environ better mimic your live one, although
+# you need to ensure that the included file does not define variables -- or
+# run filters which would conflict with testing.
+#
+
+# IMPORTANT: this dir is different from where your regular procmailrc
+# would deliver messages.  Your recipes should always avoid delivering to
+# hard-coded paths - define directories using variables so that the paths
+# can be changed external to the script.
+MAILDIR=$HOME/.procmail/sandbox
+
+# Disable icky delivery notifications (if you like 'em, go ahead and enable
+# them here).
+COMSAT=no
+
+# Newline for use in logging (this negates the need to add hard newlines
+# into logging statements - you can use $NL instead).
+NL="
+"
+
+# whitespace (spacetab) multiple
+wsstar='[ 	]*'
+
+# Define a flag to indicate that we're running in a sandbox.
+# this can be useful when you're inserting a test filter into an otherwise
+# LIVE rcfile.
+SANDBOX=1
+
+# Specify a logfile, separate from your live procmail logfile.
+# (note that you may want to purge the log file between test runs)
+LOGFILE=sandbox.log
+
+# define a temp directory (for explicit lockfiles and the like)
+TEMP=/tmp
+
+# We're testing, so it's a good bet we probably want verbosity in the logging
+VERBOSE=ON
+
+# This will log additional delivery abstract information - it isn't of much
+# significance if VERBOSE=ON above, but if you choose to switch VERBOSE=OFF,
+# this will provide more info than the barebones logging.
+LOGABSTRACT=ALL
+
+# Specify the default mail delivery mailbox file
+# For *MY* testing purposes, anything NOT specifically filtered goes to the 
+# ether (remember, we're piping into this ruleset from a saved file) - the 
+# messages I'm interested when running a test script tend to be the ones
+# expressly matched by the recipe.  If I have a need to retain copies of
+# unmatched messages, I can achieve that through the included test_filter.rc
+# For your purposes, you might want to set this to ./default.mbox or 
+# something - in any event, IT MUST NOT BE YOUR DEFAULT MAILBOX, or you'll 
+# deliver mail to yourself when running tests.  Your included test_filter.rc 
+# script can of course override this, meaning that WHEN you have a need to 
+# save unfiltered mail, you can do so without altering THIS template.
+DEFAULT=/dev/null
+
+# When manually invoked, procmail will not have an $ORGMAIL defined.  Since
+# some scripts may rely on this, you may wish to define it as /dev/null, or
+# to some test repository file.  Recall from the documentation that in normal
+# operation, the initial value of $DEFAULT is defined to be the same as 
+# $ORGMAIL.
+ORGMAIL=/dev/null
+
+# redefine SENDMAIL for the purpose of testing
+# (will be executed relative to $MAILDIR)
+SENDMAIL=./sendmail.sh
+
+# define other variables you'd normally define
+
+# Path to text files used for bounces and autoreplies, etc.
+AUTOREPLY=$HOME/.procmail/autoreply
+
+# Common header extractions I use (not necessary in YOUR sandbox, but these
+# have proven to be useful to have on hand rather than extracting them in
+# individual recipes).  Note above comments about setting the same variables
+# here as you do in your live .procmailrc
+#
+# NOTE: I MAKE EXTENSIVE USE OF SOME OF THESE VARIABLES WITHIN MY OWN
+# RECIPES.
+#
+:0
+{
+	:0
+	* ^Subject:[ 	]*\/[^ 	].*
+	{
+		SUBJECT=$MATCH
+	}
+
+	:0
+	* ^To:[ 	]*\/[^ 	].*
+	{
+		TO=$MATCH
+	}
+
+	:0
+	* ^From:[ 	]*\/[^ 	].*
+	{
+		FROM=$MATCH
+	}
+
+	# This is an optional header - your MTA configuration may not insert
+	# it (bummer for you).  It is very useful to have
+	:0
+	* ^X-Envelope-To: *<\/[^>]*
+	{
+		ENVTO=$MATCH
+	}
+
+	# This is also an optional header.  If you don't have this, you can
+	# get the same information through the commented out rule which
+	# follows.
+	:0
+	* ^X-Envelope-From: *\/[^ 	].*
+	{
+		ENVFROM=$MATCH
+	}
+
+	# alternative to X-Envelope-From:
+#	:0
+#	* ^From \/[^ ]*
+#	{
+#		ENVFROM=$MATCH
+#	}
+
+	# Here we have to call shell.... -rt will parse return address
+	# according to RFC rules.  Note we only process HEADER.
+	:0 h
+	SENDER=|formail -b -rtzxTo:
+
+	# get the From: address as an address component ONLY (no comments)
+	:0 h
+	CLEANFROM=|formail -IReply-To: -rtzxTo:
+
+	# username portion
+	:0
+	* CLEANFROM ?? ^\/[^@]+
+	{
+		FROM_USER=$MATCH
+	}
+
+	# domain portion
+	:0
+	* CLEANFROM ?? @\/.*
+	{
+		FROM_DOMAIN=$MATCH
+	}
+
+
+	# Obtain the hostname of the host which relayed the message to us.
+	# This is found in the topmost received header.
+
+	RELAYHOSTX=`formail -u Received: -czx Received:`
+
+	# The hostname provided in the SMTP EHLO exchange will be the first
+	# token on this line.
+	:0
+	* RELAYHOSTX ?? ^from \/[^ 	]*
+	{
+		RELAYHOSTEHLO=$MATCH
+	}
+
+	# Then isolate the hostname portion (if any) in the parenthetical.
+	:0
+	* RELAYHOSTX ?? ^from [^ 	]* \(\/[^)]*\)\>+by\>
+	* MATCH ?? ^\/[^)]+
+	{
+		RELAYHOSTX=$MATCH
+
+		:0
+		* RELAYHOSTX ?? ^\/[^[ ]+
+		{
+			# grab whatever up to the first space or the open
+			# brackets for the IP
+			RELAYHOST=$MATCH
+		}
+
+		:0
+		* RELAYHOSTX ?? ()\[\/[^] ]+
+		{
+			# grab the apparent host IP from the brackets
+			RELAYHOSTIP=$MATCH
+		}
+	}
+
+	# null out RELAYHOSTX (temp variable used in the extraction process)
+	RELAYHOSTX=
+
+	# if the relay host has no rDNS, RELAYHOST should be undefined.
+}
+
+
+# Finally, include your test filter HERE - it's in a separate file, where 
+# it should stay (once it tests good, it's an easy matter to move it into 
+# your live procmail config).
+INCLUDERC=test_filter.rc

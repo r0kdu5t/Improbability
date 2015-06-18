@@ -1,0 +1,29 @@
+#	File: 			noreply.rc
+#	Description:	ProcMail script for NoReply email address
+#
+#	19961002/2052 SBS	Initial coding
+#
+#	First, we file a copy, then we reply to it and stop.
+#
+
+:0
+* ^TONoReply@(somehost\.|)somedomain\.tld
+{
+	# I archive off a compressed copy for safekeeping (and future tests)
+	:0c:
+	|gzip -9fc>>$MAILDIR/noreply.gz
+
+	# If it is looped or from the mailer daemon, do nothing more.
+
+	:0 w
+	* !^FROM_DAEMON
+	* !^X-Loop: NoReply@somehost.somedomain.tld
+	| ( formail -rt -A "X-Loop: NoReply@somehost.somedomain.tld" \
+		-I "From: NoReply@somehost.somedomain.tld (No Reply robot)" ;\
+	cat $AUTOREPLY/noreply.msg ) | $SENDMAIL -t
+
+	# in case it was from daemon, looped, or failed the above delivery,
+	# ditch it.
+	:0
+	/dev/null
+}
