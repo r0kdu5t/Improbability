@@ -1,27 +1,33 @@
+
 :0
   { RULE="Simple Hello responder." }
 ## Respond to any message to hello@theatrix.org.nz
 #    with a Hello and Welcome return message.
 #       Tuesday 16 June 2015
-FROM='Andrew Sands <andrew@theatrix.org.nz>'
-
-:0 Whc: hello.lock
-* ^TO_hello@theatrix\.org\.nz
-* !^FROM_DAEMON
-* !^X-Loop: ${LOGNAME}@${HOST}
+* ^TOhello@theatrix\.org\.nz
 {
-  :0
-  { RULE="Send Hello message." }
-  :0 ehc
-  | (formail -r -I"Precedence: junk" \
-    -I"Subject: Hello from Theatrix dot Org dot NZ" \
-    -I"From: ${FROM}" \
-    -A"X-Loop: andrew@theatrix.org.nz" \
-    -A"X-Loop: ${LOGNAME}@${HOST}" ; \
-    echo "" ; \
-    echo "Hello. Your message was received."; \
-    echo "" \
-  ) | $SENDMAIL -oi -t
+	:0
+	{ RULE="Valid Hello request." }
+
+	FROM='Andrew Sands <andrew@theatrix.org.nz>'
+
+	:0 Whc: hello.lock
+	* !^FROM_DAEMON
+	* !^X-Loop: ${LOGNAME}@${HOST}
+	{
+		:0
+			{ RULE="Can send Hello message." }
+		:0 ehc
+		| (formail -r -I"Precedence: junk" \
+			-I"Subject: Hello from Theatrix dot Org dot nz" \
+			-I"From: ${FROM}" \
+			-A"X-Loop: andrew@theatrix.org.nz" \
+			-A"X-Loop: ${LOGNAME}@${HOST}" ; \
+			echo "" ; \
+			echo "Hello. Your message was received."; \
+			echo "" \
+			) | $SENDMAIL -oi -t
+	}
 }
 
 ####> CUT BELOW HERE <####
@@ -36,32 +42,41 @@ FROM='Andrew Sands <andrew@theatrix.org.nz>'
 # 2gmail - review for ideas?
 :0
   { RULE="Forward email to Gmail account." }
-
-#
-# If a message arrives with the Subject '<cmd-console/> FORWARDSTOP' then delete the file '.forwardmail',
-# therefore turning off mail forwarding.
-#
-
-:0 hi
-   * ^Subject: <cmd-console/> FORWARDSTOP
-   |/bin/rm -f $HOME/.forwardmail
-
-#
-# If a message arrives with the Subject '<cmd-console/> FORWARDGO' then create the file '.forwardmail',
-# therefore turning on mail forwarding.
-#
-
-:0 hi
-   * ^Subject: <cmd-console/> FORWARDGO
-   |/bin/touch $HOME/.forwardmail
-#
-#
 #
 SENDMAIL=/usr/sbin/sendmail
 FROM_=`formail -c -I"Reply-To:" -rt -xTo: \
   | expand | sed -e 's/^[ ]*//g' -e 's/[ ]*$//g'`
 SUBJ_=`formail -xSubject: \
        | expand | sed -e 's/^[ ]*//g' -e 's/[ ]*$//g'`
+#
+# If a message arrives with the Subject '<cmd-console/> FORWARDSTOP' then delete the file '.forwardmail',
+# therefore turning off mail forwarding.
+#
+:0 hi
+   * ^Subject: <cmd-console/> FORWARDSTOP
+   |/bin/rm -f $HOME/.forwardmail
+
+#   :0 Ahw
+#   | (formail -r -I"Precedence: junk" \
+#   		-A"X-Loop: andrew@theatrix.org.nz" ; \
+#   		echo "FORWARDSTOP - command received.") | $SENDMAIL -t
+
+#
+# If a message arrives with the Subject '<cmd-console/> FORWARDGO' then create the file '.forwardmail',
+# therefore turning on mail forwarding.
+#
+:0 hi
+   * ^Subject: <cmd-console/> FORWARDGO
+   |/bin/touch $HOME/.forwardmail
+
+   :0 Ahw
+   | (formail -r -I"Precedence: junk" \
+   		-A"X-Loop: andrew@theatrix.org.nz" ; \
+   		echo "FORWARDGO - command received.") | $SENDMAIL -t
+
+#
+#
+#
 
 # Make a copy of all email to my second address
 :0
