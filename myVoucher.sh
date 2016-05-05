@@ -35,6 +35,8 @@ touch $OUTFILENAME
 ## Insert headers into output file
 echo "$HEADER1,$HEADER2" >> $OUTFILENAME
 
+WORKFILE=$(newest_matching_file '*${LABEL_SET_TYPE}')
+
 echo $DLDIR
 echo $HEADER1
 echo $HEADER2
@@ -43,3 +45,5 @@ echo $DURATION
 echo $LABEL_SET_NAME
 echo $LABEL_SET_TYPE
 cat $OUTFILENAME
+rm $OUTFILENAME
+echo $WORKFILE
