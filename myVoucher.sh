@@ -14,10 +14,32 @@
 
 # Define local variables
 DLDIR="/home/andrew/Downloads"
-HEADER1=""
-HEADER2=""
+HEADER1="Voucher"
+HEADER2="Duration"
+NUMVOUCHER=12
 DURATION=120
-LABEL_NAME="voucher.csv" # Glabels template uses this for data input.
+LABEL_SET_NAME="voucher" # Glabels template uses this for data import.
+LABEL_SET_TYPE=".csv"
+OUTDIR="/tmp/"
+OUTFILENAME=$OUTDIR$LABEL_SET_NAME$LABEL_SET_TYPE
 ## cd ~/Downloads/ && echo "Voucher,Duration" >> /tmp/voucher.csv && \
 ## tail -n 12 vouchers_twilight_zone_roll6.csv | sed 's/$/,120/' >> /tmp/voucher.csv \
 ## && cat /tmp/voucher.csv && rm vouchers_twilight_zone_roll5.csv # Adjust for csv file name
+
+## Change to download directory
+#cd $DLDIR
+
+## Create output file - in /tmp 
+touch $OUTFILENAME
+
+## Insert headers into output file
+echo "$HEADER1,$HEADER2" >> $OUTFILENAME
+
+echo $DLDIR
+echo $HEADER1
+echo $HEADER2
+echo $NUMVOUCHER
+echo $DURATION
+echo $LABEL_SET_NAME
+echo $LABEL_SET_TYPE
+cat $OUTFILENAME
