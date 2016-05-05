@@ -36,7 +36,7 @@ touch $OUTFILENAME
 echo "$HEADER1,$HEADER2" >> $OUTFILENAME
 
 WORKFILE=$(newest_matching_file '*'${LABEL_SET_TYPE})
-tail -n $NUMVOUCHER $WORKFILE | sed 's/$/,$DURATION/' >> $OUTFILENAME
+tail -n $NUMVOUCHER $WORKFILE | sed -e s/$/",${DURATION}"/ >> $OUTFILENAME
 
 ## DEBUG output printing of variables
 echo $DLDIR
