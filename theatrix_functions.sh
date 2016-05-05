@@ -90,3 +90,16 @@ function newest_matching_file
 
     return 0
 }
+
+##################################################################
+# Purpose: Get number of lines in file
+# Arguments:
+#   $1 -> Filename of file
+##################################################################
+# Refer: http://stackoverflow.com/questions/12022319/bash-echo-number \
+#  -of-lines-of-file-given-in-a-bash-variable-without-the-file-name
+# NUMOFLINES=$(cat $JAVA_TAGS_FILE | wc -l )
+function number_of_lines()
+{
+    cat $1 | wc -l
+}

@@ -22,3 +22,12 @@ echo -e "*** Orignal quote: \n${var1}"
 # Pass $var1 as arg to to_lower()
 # Use command substitution inside echo
 echo -e "*** Lowercase version: \n$(to_lower ${var1})"
+
+# Invoke the newest_matching_file 'b2*'
+#
+cd ~/Downloads
+newest_matching_file '*csv'
+number_of_lines $(newest_matching_file '*csv')
+cd
+
+#
