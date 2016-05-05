@@ -27,7 +27,7 @@ OUTFILENAME=$OUTDIR$LABEL_SET_NAME$LABEL_SET_TYPE
 ## && cat /tmp/voucher.csv && rm vouchers_twilight_zone_roll5.csv # Adjust for csv file name
 
 ## Change to download directory
-#cd $DLDIR
+cd $DLDIR
 
 ## Create output file - in /tmp 
 touch $OUTFILENAME
@@ -35,8 +35,10 @@ touch $OUTFILENAME
 ## Insert headers into output file
 echo "$HEADER1,$HEADER2" >> $OUTFILENAME
 
-WORKFILE=$(newest_matching_file '*${LABEL_SET_TYPE}')
+WORKFILE=$(newest_matching_file '*'${LABEL_SET_TYPE})
+tail -n $NUMVOUCHER $WORKFILE | sed 's/$/,$DURATION/' >> $OUTFILENAME
 
+## DEBUG output printing of variables
 echo $DLDIR
 echo $HEADER1
 echo $HEADER2
@@ -45,5 +47,8 @@ echo $DURATION
 echo $LABEL_SET_NAME
 echo $LABEL_SET_TYPE
 cat $OUTFILENAME
-rm $OUTFILENAME
 echo $WORKFILE
+
+## Tidy UP at the end.
+rm $OUTFILENAME
+cd
