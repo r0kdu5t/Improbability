@@ -12,6 +12,19 @@
 # Local path is /home/andrew/Working/Improbability/theatrix_functions.sh
 . /home/andrew/Working/Improbability/theatrix_functions.sh
 
+## Internal do_debug function
+function do_debug () {
+	## DEBUG output printing of variables
+	echo $DLDIR
+	echo $HEADER1
+	echo $HEADER2
+	echo $NUMVOUCHER
+	echo $DURATION
+	echo $LABEL_SET_NAME
+	echo $LABEL_SET_TYPE
+	echo $WORKFILE
+}
+
 # Define local variables
 DLDIR="/home/andrew/Downloads"
 HEADER1="Voucher"
@@ -46,16 +59,8 @@ tail -n $NUMVOUCHER $WORKFILE | sed -e s/$/",${DURATION}"/ >> $OUTFILENAME
 ## Output completed action to screen for review
 cat $OUTFILENAME
 
-## DEBUG output printing of variables
-echo $DLDIR
-echo $HEADER1
-echo $HEADER2
-echo $NUMVOUCHER
-echo $DURATION
-echo $LABEL_SET_NAME
-echo $LABEL_SET_TYPE
-
-echo $WORKFILE
+## Test do_debug function
+do_debug
 
 ## Tidy UP at the end.
 rm $OUTFILENAME
