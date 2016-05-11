@@ -37,11 +37,14 @@ echo "$HEADER1,$HEADER2" >> $OUTFILENAME
 
 ## Find source data file 
 WORKFILE=$(newest_matching_file '*'${LABEL_SET_TYPE})
+
+## Add DURATION data value to each line
 tail -n $NUMVOUCHER $WORKFILE | sed -e s/$/",${DURATION}"/ >> $OUTFILENAME
 ### Refer: http://www.linuxquestions.org/questions/programming-9 \
 ###        /sed-doesn't-accept-$variable-in-bash-script-325935/
 
-##
+## Output completed action to screen for review
+cat $OUTFILENAME
 
 ## DEBUG output printing of variables
 echo $DLDIR
