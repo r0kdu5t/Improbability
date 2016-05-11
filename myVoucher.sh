@@ -35,8 +35,13 @@ touch $OUTFILENAME
 ## Insert headers into output file
 echo "$HEADER1,$HEADER2" >> $OUTFILENAME
 
+## Find source data file 
 WORKFILE=$(newest_matching_file '*'${LABEL_SET_TYPE})
 tail -n $NUMVOUCHER $WORKFILE | sed -e s/$/",${DURATION}"/ >> $OUTFILENAME
+### Refer: http://www.linuxquestions.org/questions/programming-9 \
+###        /sed-doesn't-accept-$variable-in-bash-script-325935/
+
+##
 
 ## DEBUG output printing of variables
 echo $DLDIR
@@ -46,7 +51,7 @@ echo $NUMVOUCHER
 echo $DURATION
 echo $LABEL_SET_NAME
 echo $LABEL_SET_TYPE
-cat $OUTFILENAME
+
 echo $WORKFILE
 
 ## Tidy UP at the end.
