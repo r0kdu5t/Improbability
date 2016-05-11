@@ -57,11 +57,13 @@ tail -n $NUMVOUCHER $WORKFILE | sed -e s/$/",${DURATION}"/ >> $OUTFILENAME
 ###        /sed-doesn't-accept-$variable-in-bash-script-325935/
 
 ## Output completed action to screen for review
+### TODO - Add description of what's just be chucked onto screen.
 cat $OUTFILENAME
 
+### TODO - Follow with blank line and instructions / reminder of what to do next!
 ## Test do_debug function
-do_debug
+#do_debug
 
-## Tidy UP at the end.
+## Tidy UP at the end. Remove outfile and return to home directory.
 rm $OUTFILENAME
 cd
