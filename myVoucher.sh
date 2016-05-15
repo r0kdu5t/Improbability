@@ -64,6 +64,6 @@ cat $OUTFILENAME
 ## Test do_debug function
 #do_debug
 
-## Tidy UP at the end. Remove outfile and return to home directory.
-rm $OUTFILENAME
+## Tidy Up at the end. Remove workfile and return to home directory.
+#rm $WORKFILENAME
 cd
