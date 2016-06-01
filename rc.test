@@ -1,0 +1,91 @@
+:0
+  { RULE="RUNNING rc.test" }
+
+#
+:0
+  { RULE="Test plus addresses. June 2015" }
+
+## Made change to /etc/postfix/master.cf
+ARG=$1
+
+:0:
+* ARG ?? testing
+.cron-jobs/
+
+
+#:0
+#    !dan+$ARG@things.example.org
+    
+#
+# http://www.freebsddiary.org/procmail-foo+bar-addresses.php
+#
+#ARG = $1
+#
+#:0
+#* ARG ?? ^^cvs-all^^|^^procmail|^^postgresql-advocacy^^
+#$ARG\
+# 
+#* ARG ?? ^^^^
+
+:0
+  { RULE="On-line Learning. April 2015" }
+
+FROM="^(From[ 	]|(Old-|X-)?(Resent-)?(From|Reply-To|Sender):)(.*\<)?"
+
+# Use thusly:
+# last modified: Friday 8 May, 2015
+:0
+* $ ${FROM}(email\.udemy\.com|edx\.org|codeschool\.com|codecademy\.com|linuxfoundation\.org)
+.Learning/
+
+:0
+* !
+* $ ${FROM}news@edx\.org
+.Learning/
+
+:0
+* !
+* $ ${FROM}hal@codeschool\.com
+.Learning/
+
+:0
+* !
+* $ ${FROM}contact@codecademy\.com
+.Learning/
+
+:0
+  { RULE="dramatech bigfoot to spam." }
+## All mail from drametech goes directly to spam folder
+#    for review and subsequent action.
+#	Tuesday 28 April 2015
+:0
+* ^To:.*dramatech@bigfoot\.com 
+.spam/
+
+# http://stackoverflow.com/questions/3976716/move-emails-with-procmail-if-it-matches-from-sender
+
+:0
+  { RULE="Simple Hello responder." }
+## Respond to any message to hello@theatrix.org.nz
+#    with a Hello and Welcome return message.
+#       Tuesday 16 June 2015
+FROM='Andrew Sands <andrew@theatrix.org.nz>'
+
+:0 Whc: hello.lock
+* ^TO_hello@theatrix\.org\.nz
+* !^FROM_DAEMON
+* !^X-Loop: ${LOGNAME}@${HOST}
+{
+  :0
+  { RULE="Send Hello message." }
+  :0 ehc
+  | (formail -r -I"Precedence: junk" \
+    -I"Subject: Hello from Theatrix dot Org dot NZ" \
+    -I"From: ${FROM}" \
+    -A"X-Loop: andrew@theatrix.org.nz" \
+    -A"X-Loop: ${LOGNAME}@${HOST}" ; \
+    echo "" ; \
+    echo "Hello. Your message was received."; \
+    echo "" \
+  ) | $SENDMAIL -oi -t
+}
