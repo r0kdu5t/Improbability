@@ -29,7 +29,7 @@ function do_debug () {
 DLDIR="/home/andrew/Downloads"
 HEADER1="Voucher"
 HEADER2="Duration"
-NUMVOUCHER=12
+NUMVOUCHER=6	# Need to change this to an arguement via the command line.
 DURATION=120
 LABEL_SET_NAME="voucher" # Glabels template uses this for data import.
 LABEL_SET_TYPE=".csv"
