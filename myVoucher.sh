@@ -29,9 +29,8 @@ function do_debug () {
 DLDIR="/home/andrew/Downloads"
 HEADER1="Voucher"
 HEADER2="Duration"
-NUMVOUCHER=6	# Need to change this to an arguement via the command line.
 #http://unix.stackexchange.com/questions/122845/using-a-b-for-variable-assignment-in-scripts
-#DURATION=120
+NUMVOUCHER=${1:-12}	
 DURATION=${2:-"120"}
 LABEL_SET_NAME="voucher" # Glabels template uses this for data import.
 LABEL_SET_TYPE=".csv"
