@@ -44,8 +44,14 @@ OUTFILENAME=$OUTDIR$LABEL_SET_NAME$LABEL_SET_TYPE
 ## Change to download directory
 cd $DLDIR
 
-## Create output file - in /tmp 
-touch $OUTFILENAME
+## Create output file / Check for and remove existing?
+if [ -f $OUTFILENAME ] ; then
+	rm $OUTFILENAME
+	echo "Deleting existing file: $OUTFILENAME"
+	touch $OUTFILENAME
+else
+	touch $OUTFILENAME
+fi
 
 ## Insert headers into output file
 echo "$HEADER1,$HEADER2" >> $OUTFILENAME
