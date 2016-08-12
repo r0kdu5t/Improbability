@@ -52,11 +52,13 @@ function is_user_exits()
     grep -q "^${u}" $PASSWD_FILE && return $TRUE || return $FALSE
 }
 
+##################################################################
 # See :- http://stackoverflow.com/questions/5885934/bash-function-to-find-newest-file-matching-pattern
 # Print the newest file, if any, matching the given pattern
 # Example usage:
 #   newest_matching_file 'b2*'
 # WARNING: Files whose names begin with a dot will not be checked
+##################################################################
 function newest_matching_file
 {
     # Use ${1-} instead of $1 in case 'nounset' is set
