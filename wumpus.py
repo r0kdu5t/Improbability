@@ -48,6 +48,27 @@ def finish_caves():
 			passage_to = choose_cave(cave_numbers)
 			caves[cave].append(passage_to)
 
+def print_location(player_location):
+	""" Tell the player about where they are.. """
+	print("You are in cave", player_location)
+	print("From here, you can see caves: ")
+	print(caves[player_location])
+	if wumpus_location in caves[player_location]:
+		print("I smell a wumpus!")
+
+def get_next_location(): 
+	""" Get the player's next location. """
+	print("Which cave next?")
+	player_input = raw_input("> ")
+	if (not player_input.isdigit() or \
+		int(player_input) not in caves[player_location]):
+		print(player_input + " ?")
+		print("That's not a direction that I can see!")
+		return None
+	else:
+		return int(player_input)
+
+
 
 unvisited_caves = range(0, 20)
 visited_caves = [0]
@@ -87,19 +108,8 @@ print("To play, just type the number")
 print("of the cave you wish to enter next.")
 
 while True:
-	print("You are in cave", player_location)
-	print("From here, you can see caves: ", caves[player_location])
-	if wumpus_location in caves[player_location]:
-		print("I smell a wumpus!")
+
 
 	print("Which cave next?")
-	player_input = raw_input("> ")
-	if (not player_input.isdigit() or int(player_input) not in caves[player_location]):
-		print(player_input, " ?")
-		print("That's not a direction that I can see!")
+	
 
-	else:
-		player_location = int(player_input)
-		if player_location == wumpus_location:
-			print("Aargh! You got eaten by a wumpus!")
-			break
