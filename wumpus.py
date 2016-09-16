@@ -25,10 +25,29 @@ def print_caves():
 		print(number, ":", caves[number])
 	print("----------")
 
-cave_numbers = range(0, 20)
-caves = []
-for i in cave_numbers:
-	caves.append([])
+def setup_caves(cave_numbers):
+	""" Create the starting list of caves
+	"""
+	caves = []
+	for cave in cave_numbers:
+		caves.append([])
+	return caves
+
+def link_caves():
+	""" Make sure all of the caves are connected with two-way tunnels. """
+	while unvisited_caves != []:
+		this_cave = choose_cave(visited_caves)
+		next_cave = choose_cave(unvisited_caves)
+	create_tunnel(this_cave, next_cave)
+	visit_cave(next_cave)
+
+def finish_caves():
+	""" Link the rest of the caves with one-way tunnels. """
+	for cave in cave_numbers:
+		while len(caves[cave]) < 3:
+			passage_to = choose_cave(cave_numbers)
+			caves[cave].append(passage_to)
+
 
 unvisited_caves = range(0, 20)
 visited_caves = [0]
