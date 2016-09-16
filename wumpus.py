@@ -92,7 +92,7 @@ print("of the cave you wish to enter next.")
 while True:
 	print_location(player_location)
 	new_location = get_next_location()
-	if new_location isn't None:
+	if new_location is not None:
 		player_location = new_location
 	if player_location == wumpus_location:
 		print("Aargh! You got eaten by a wumpus!")
