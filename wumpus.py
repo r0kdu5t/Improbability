@@ -22,7 +22,7 @@ def print_caves():
 	""" Print out the current cave structure!
 	"""
 	for number in cave_numbers:
-		print(number, ":", caves[number])
+		print(str(number) + ":" + str(caves[number]))
 	print("----------")
 
 def setup_caves(cave_numbers):
