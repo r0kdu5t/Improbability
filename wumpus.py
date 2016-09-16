@@ -1,83 +1,84 @@
 from random import choice
 
 def create_tunnel(cave_from, cave_to):
-	""" Create a tunnel between cave_from and cave_to.  """
-	print("Creating tunnels") # DEBUG
-	caves[cave_from].append(cave_to)
-	caves[cave_to].append(cave_from)
+    """ Create a tunnel between cave_from and cave_to.  """
+    print("Creating tunnels") # DEBUG
+    caves[cave_from].append(cave_to)
+    caves[cave_to].append(cave_from)
 
 def visit_cave(cave_number):
-	""" Mark a cave as visited. """
-	print("Visit cave")	# DEBUG
-	visited_caves.append(cave_number)
-	unvisited_caves.remove(cave_number)
+    """ Mark a cave as visited. """
+    print("Visit cave") # DEBUG
+    visited_caves.append(cave_number)
+    unvisited_caves.remove(cave_number)
 
 def choose_cave(cave_list):
-	""" Pick a cave from a list, provided that the cave has \
-	less than three (3) tunnels. """
-	print("Choosing cave.")		# DEBUG
-	cave_number = choice(cave_list)
-	while len(caves[cave_number]) >= 3:
-		cave_number = choice(cave_list)
-	return cave_number
+    """ Pick a cave from a list, provided that the cave has \
+    less than three (3) tunnels. """
+    #print("Choosing cave.")     # DEBUG
+    cave_number = choice(cave_list)
+    while len(caves[cave_number]) >= 3:
+        cave_number = choice(cave_list)
+    return cave_number
 
 def print_caves():
-	""" Print out the current cave structure! """
-	print("Printing caves")		# DEBUG
-	for number in cave_numbers:
-		print(str(number) + ":" + str(caves[number]))
-	print("----------")
+    """ Print out the current cave structure! """
+    print("Printing caves")     # DEBUG
+    for number in cave_numbers:
+        print(str(number) + ":" + str(caves[number]))
+    print("----------")
 
 def setup_caves(cave_numbers):
-	""" Create the starting list of caves """
-	print("Setting up caves, now!")	# DEBUG
-	caves = []
-	for cave in cave_numbers:
-		caves.append([])
-	return caves
+    """ Create the starting list of caves """
+    print("Setting up caves, now!") # DEBUG
+    caves = []
+    for cave in cave_numbers:
+        caves.append([])
+    return caves
 
 def link_caves():
-	""" Make sure all of the caves are connected with two-way tunnels. """
-	print("Link caves.") # DEBUG
-	while unvisited_caves != []:
-		this_cave = choose_cave(visited_caves)
-		next_cave = choose_cave(unvisited_caves)
-	create_tunnel(this_cave, next_cave)
-	visit_cave(next_cave)
+    """ Make sure all of the caves are connected with two-way tunnels. """
+    print("Link caves.") # DEBUG
+    while unvisited_caves != []:
+        this_cave = choose_cave(visited_caves)
+        next_cave = choose_cave(unvisited_caves)
+    create_tunnel(this_cave, next_cave)
+    visit_cave(next_cave)
 
 def finish_caves():
-	""" Link the rest of the caves with one-way tunnels. """
-	print("Finish cave setup.") # DEBUG
-	for cave in cave_numbers:
-		while len(caves[cave]) < 3:
-			passage_to = choose_cave(cave_numbers)
-			caves[cave].append(passage_to)
+    """ Link the rest of the caves with one-way tunnels. """
+    print("Finish cave setup.") # DEBUG
+    for cave in cave_numbers:
+        while len(caves[cave]) < 3:
+            passage_to = choose_cave(cave_numbers)
+            caves[cave].append(passage_to)
 
 def print_location(player_location):
-	""" Tell the player about where they are.. """
-	print("You are in cave", player_location)
-	print("From here, you can see caves: ")
-	print(caves[player_location])
-	if wumpus_location in caves[player_location]:
-		print("I smell a wumpus!")
+    """ Tell the player about where they are.. """
+    print("You are in cave", player_location)
+    print("From here, you can see caves: ")
+    print(caves[player_location])
+    if wumpus_location in caves[player_location]:
+        print("I smell a wumpus!")
 
 def get_next_location(): 
-	""" Get the player's next location. """
-	print("Which cave next?")
-	player_input = raw_input("> ")
-	if (not player_input.isdigit() or \
-		int(player_input) not in caves[player_location]):
-		print(player_input + " ?")
-		print("That's not a direction that I can see!")
-		return None
-	else:
-		return int(player_input)
+    """ Get the player's next location. """
+    print("Which cave next?")
+    player_input = raw_input("> ")
+    if (not player_input.isdigit() or \
+        int(player_input) not in caves[player_location]):
+        print(player_input + " ?")
+        print("That's not a direction that I can see!")
+        return None
+    else:
+        return int(player_input)
 
-cave_numbers = range(0,20)
-unvisited_caves = range(0,20)
+cave_numbers = range(0,5)
+unvisited_caves = range(0,5)
 visited_caves = []
-#print("The number of caves: " + str(cave_numbers)) #DEBUG
+print("The number of caves: " + str(cave_numbers)) #DEBUG
 caves = setup_caves(cave_numbers)
+print("DEBUG :", caves) # DEBUG
 
 visit_cave(0)
 print_caves()
@@ -88,7 +89,7 @@ finish_caves()
 wumpus_location = choice(cave_numbers)
 player_location = choice(cave_numbers)
 while player_location == wumpus_location:
-	player_location = choice(cave_numbers)
+    player_location = choice(cave_numbers)
 
 print("Welcome to Hunt the Wumpus!")
 
@@ -97,12 +98,13 @@ print("You can see", len(cave_numbers), "caves")
 print("To play, just type the number")
 print("of the cave you wish to enter next.")
 """
-
+'''
 while True:
-	print_location(player_location)
-	new_location = get_next_location()
-	if new_location is not None:
-		player_location = new_location
-	if player_location == wumpus_location:
-		print("Aargh! You got eaten by a wumpus!")
-		break
+    print_location(player_location)
+    new_location = get_next_location()
+    if new_location is not None:
+        player_location = new_location
+    if player_location == wumpus_location:
+        print("Aargh! You got eaten by a wumpus!")
+        break
+'''
