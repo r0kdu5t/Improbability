@@ -45,5 +45,26 @@ def finish_caves():
 			passage_to = choose_cave(cave_numbers)
 			caves[cave].append(passage_to)
 
+## Player-interaction functions
+def print_location(player_location):
+	""" Tell the player about where they are. """
+	print "You are in a cave", player_location
+	print "From here, you can see caves:"
+	print caves[player_location]
+	if wumpus_location in caves[player_location]:
+		print "I smell a wumpus!"
+
+def get_next_location():
+	""" Get the player's next location """
+	print "Which cave next?"
+	player_input = raw_input("> ")
+	if (not player_input.isdigit() or int(player_input) not in caves[player_location]):
+		print player_input + "?"
+		print "That's not a direction that I can see!"
+		return None:
+	else:
+		return int(player_input)
+
+
 
 
