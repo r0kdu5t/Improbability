@@ -37,8 +37,9 @@ def link_caves():
 	while unvisited_caves != []:
 		this_cave = choose_cave(visited_caves)
 		next_cave = choose_cave(unvisited_caves)
-	create_tunnel(this_cave, next_cave)
-	visit_cave(next_cave)
+		# Change indent on following two lines?
+		create_tunnel(this_cave, next_cave)
+		visit_cave(next_cave)
 
 def finish_caves():
 	""" Link the rest of the caves with one-way tunnels. """
@@ -63,7 +64,7 @@ def get_next_location():
 	if (not player_input.isdigit() or int(player_input) not in caves[player_location]):
 		print player_input + "?"
 		print "That's not a direction that I can see!"
-		return None:
+		return None
 	else:
 		return int(player_input)
 
