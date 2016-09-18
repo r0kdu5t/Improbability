@@ -42,8 +42,8 @@ def link_caves():
     while unvisited_caves != []:
         this_cave = choose_cave(visited_caves)
         next_cave = choose_cave(unvisited_caves)
-    create_tunnel(this_cave, next_cave)
-    visit_cave(next_cave)
+        create_tunnel(this_cave, next_cave)
+        visit_cave(next_cave)
 
 def finish_caves():
     """ Link the rest of the caves with one-way tunnels. """
@@ -98,7 +98,7 @@ print("You can see", len(cave_numbers), "caves")
 print("To play, just type the number")
 print("of the cave you wish to enter next.")
 """
-'''
+
 while True:
     print_location(player_location)
     new_location = get_next_location()
@@ -107,4 +107,3 @@ while True:
     if player_location == wumpus_location:
         print("Aargh! You got eaten by a wumpus!")
         break
-'''
