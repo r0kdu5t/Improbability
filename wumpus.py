@@ -85,7 +85,7 @@ def print_location(player_location):
     for tunnel in range(0,3):
         next_cave = neighbors[tunnel]
         print "   ", tunnel + 1, "-", cave_names[next_cave]
-    if wumpus_location in caves[player_location]:
+    if wumpus_location in neighbors:
         print("I smell a wumpus!")
 
 def ask_for_cave(): 
