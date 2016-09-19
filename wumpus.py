@@ -2,13 +2,13 @@ from random import choice
 
 def create_tunnel(cave_from, cave_to):
     """ Create a tunnel between cave_from and cave_to.  """
-    print("Creating tunnels") # DEBUG
+    #print("Creating tunnels") # DEBUG
     caves[cave_from].append(cave_to)
     caves[cave_to].append(cave_from)
 
 def visit_cave(cave_number):
     """ Mark a cave as visited. """
-    print("Visit cave") # DEBUG
+    #print("Visit cave") # DEBUG
     visited_caves.append(cave_number)
     unvisited_caves.remove(cave_number)
 
@@ -23,14 +23,14 @@ def choose_cave(cave_list):
 
 def print_caves():
     """ Print out the current cave structure! """
-    print("Printing caves")     # DEBUG
+    #print("Printing caves")     # DEBUG
     for number in cave_numbers:
         print(str(number) + ":" + str(caves[number]))
     print("----------")
 
 def setup_caves(cave_numbers):
     """ Create the starting list of caves """
-    print("Setting up caves, now!") # DEBUG
+    #print("Setting up caves, now!") # DEBUG
     caves = []
     for cave in cave_numbers:
         caves.append([])
@@ -38,7 +38,7 @@ def setup_caves(cave_numbers):
 
 def link_caves():
     """ Make sure all of the caves are connected with two-way tunnels. """
-    print("Link caves.") # DEBUG
+    #print("Link caves.") # DEBUG
     while unvisited_caves != []:
         this_cave = choose_cave(visited_caves)
         next_cave = choose_cave(unvisited_caves)
@@ -47,7 +47,7 @@ def link_caves():
 
 def finish_caves():
     """ Link the rest of the caves with one-way tunnels. """
-    print("Finish cave setup.") # DEBUG
+    #print("Finish cave setup.") # DEBUG
     for cave in cave_numbers:
         while len(caves[cave]) < 3:
             passage_to = choose_cave(cave_numbers)
@@ -73,12 +73,12 @@ def get_next_location():
     else:
         return int(player_input)
 
-cave_numbers = range(0,5)
-unvisited_caves = range(0,5)
+cave_numbers = range(0,20)
+unvisited_caves = range(0,20)
 visited_caves = []
-print("The number of caves: " + str(cave_numbers)) #DEBUG
+#print("The number of caves: " + str(cave_numbers)) #DEBUG
 caves = setup_caves(cave_numbers)
-print("DEBUG :", caves) # DEBUG
+#print("DEBUG :", caves) # DEBUG
 
 visit_cave(0)
 print_caves()
