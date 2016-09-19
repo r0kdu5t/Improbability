@@ -55,9 +55,9 @@ def finish_caves():
 
 def print_location(player_location):
     """ Tell the player about where they are.. """
-    print("You are in cave", player_location)
-    print("From here, you can see caves: ")
-    print(caves[player_location])
+    print "You are in cave", player_location
+    print "From here, you can see caves: "
+    print caves[player_location]
     if wumpus_location in caves[player_location]:
         print("I smell a wumpus!")
 
@@ -137,7 +137,7 @@ while 1:
         continue
 
     if action == "m":
-        player_location = do_movement
+        player_location = do_movement()
         if player_location == wumpus_location:
             print("Aargh! You got eaten by a wumpus!")
             break
