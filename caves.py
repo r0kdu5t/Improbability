@@ -44,12 +44,12 @@ def create_caves():
 	caves = [Cave(cave_names[0])]
 	for name in cave_names[1:]:
 		new_cave = Cave(name, name)
-		eligible_caves = [cave for cave in caves
-							if len(cave.tunnels) < 3]
+		eligible_caves = [cave for cave in caves if len(cave.tunnels) < 3]
 		new_cave.tunnel_to(choice(eligible_caves))
 		caves.append(new_cave)
 	return caves
 
-if __name__ == 'main':
+if __name__ == '__main__':
+	print "Hello"
 	for cave in create_caves():
 		print cave.name, " => ", cave.tunnels
