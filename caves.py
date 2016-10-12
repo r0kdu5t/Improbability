@@ -41,7 +41,7 @@ cave_names = [
 
 def create_caves():
 	shuffle(cave_names)
-	caves = [Cave(cave_names[0])]
+	caves = [Cave(cave_names[0], "descr")]
 	for name in cave_names[1:]:
 		new_cave = Cave(name, name)
 		eligible_caves = [cave for cave in caves if len(cave.tunnels) < 3]
@@ -50,6 +50,5 @@ def create_caves():
 	return caves
 
 if __name__ == '__main__':
-	print "Hello"
 	for cave in create_caves():
 		print cave.name, " => ", cave.tunnels
