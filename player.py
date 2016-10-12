@@ -45,5 +45,22 @@ class Player(object):
 
 	actions = ['look', 'quit']
 
-	
+def test():
+	import cave
+	empty_cave = cave.Cave(
+		"Empty Cave",
+		"A desolate, empty cave, "
+		"waiting for someone to fill it.")
+	player = Player(empty_cave)
+
+	print player.location.name
+	print player.location.description
+	while player.playing:
+		input = player.get_input()
+		result = player.process_input(input)
+		print "\n".join(result)
+
+if __name__ == '__main__':
+	test()
+
 		
