@@ -27,8 +27,7 @@ class Player(object):
 
 	def find_handler(self, verb, noun):
 		if noun != "":
-			object = [x for x in self.location.here \
-					   if x is not self and x.name == noun and verb in x.actions]
+			object = [x for x in self.location.here if x is not self and x.name == noun and verb in x.actions]
 			if len(object) > 0:
 				return getattr(object[0], verb)
 		if verb.lower() in self.actions:
@@ -46,8 +45,8 @@ class Player(object):
 	actions = ['look', 'quit']
 
 def test():
-	import cave
-	empty_cave = cave.Cave(
+	import caves
+	empty_cave = caves.Cave(
 		"Empty Cave",
 		"A desolate, empty cave, "
 		"waiting for someone to fill it.")
@@ -62,5 +61,3 @@ def test():
 
 if __name__ == '__main__':
 	test()
-
-		
