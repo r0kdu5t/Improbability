@@ -29,5 +29,6 @@ cd ~/Downloads
 newest_matching_file '*csv'
 number_of_lines $(newest_matching_file '*csv')
 cd
-
 #
+checkuser $USER
+echo $?

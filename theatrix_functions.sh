@@ -116,15 +116,17 @@ function number_of_lines()
 ##################################################################
 function checkuser()
 {
-    echo "*** checkuser( $@ ) ***"
+    #echo "*** checkuser( $@ ) ***"
 
     for u in `who | cut -f1 -d" " | sort | uniq`
     do
         if [ "$u" = "$1" ] ; then
-            echo exit 0
+            #echo exit 0
+            exit 0
         fi
   done
 }
+## Last modified: Sunday March 12, 2017
 
 ##################################################################
 # Purpose:
