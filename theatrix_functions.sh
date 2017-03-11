@@ -105,3 +105,30 @@ function number_of_lines()
 {
     cat $1 | wc -l
 }
+
+##################################################################
+# Purpose  : 
+# Reference: See the following
+#   simple script to tell if a user is logged in or not bash - need comments
+#   https://ubuntuforums.org/showthread.php?t=2075873
+# Arguments:
+# Return   :  
+##################################################################
+function checkuser()
+{
+    echo "*** checkuser( $@ ) ***"
+
+    for u in `who | cut -f1 -d" " | sort | uniq`
+    do
+        if [ "$u" = "$1" ] ; then
+            echo exit 0
+        fi
+  done
+}
+
+##################################################################
+# Purpose:
+# Reference: 
+# Arguments:
+# Return:  
+##################################################################
