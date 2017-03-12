@@ -57,8 +57,14 @@ fi
 ## Insert headers into output file
 echo "$HEADER1,$HEADER2" >> $OUTFILENAME
 
-## Find source data file 
-WORKFILE=$(newest_matching_file '*'${LABEL_SET_TYPE})
+## Find source data file, if not given on command line
+if [ -z "$3" ]; then
+    echo "Not given as arguement."
+    WORKFILE=$(newest_matching_file '*'${LABEL_SET_TYPE})
+else
+	WORKFILE=$3
+fi 
+
 
 ## Add DURATION data value to each line
 tail -n $NUMVOUCHER $WORKFILE | sed 's/ //g' | sed -e s/$/",${DURATION}"/ >> $OUTFILENAME
