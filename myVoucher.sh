@@ -6,6 +6,8 @@
 #           add header lines and duration value datum.
 # Arguments:
 #   Still thinking about it!
+#   $1 -> Number of vouchers (optional), defaults to 12
+#   $2 -> Voucher duration [minutes] (optional), defaults to 120
 ##################################################################
 
 # Load the  myfunctions.sh 
@@ -37,7 +39,7 @@ LABEL_SET_TYPE=".csv"
 OUTDIR="/tmp/"
 OUTFILENAME=$OUTDIR$LABEL_SET_NAME$LABEL_SET_TYPE
 ## cd ~/Downloads/ && echo "Voucher,Duration" >> /tmp/voucher.csv && \
-## tail -n 12 vouchers_twilight_zone_roll6.csv | sed 's/$/,120/' >> /tmp/voucher.csv \
+## tail -n 12 vouchers_twilight_zone_roll6.csv | sed 's/ //g' | sed 's/$/,120/' >> /tmp/voucher.csv \
 ## && cat /tmp/voucher.csv && rm vouchers_twilight_zone_roll5.csv # Adjust for csv file name
 
 ## Change to download directory
@@ -59,7 +61,7 @@ echo "$HEADER1,$HEADER2" >> $OUTFILENAME
 WORKFILE=$(newest_matching_file '*'${LABEL_SET_TYPE})
 
 ## Add DURATION data value to each line
-tail -n $NUMVOUCHER $WORKFILE | sed -e s/$/",${DURATION}"/ >> $OUTFILENAME
+tail -n $NUMVOUCHER $WORKFILE | sed 's/ //g' | sed -e s/$/",${DURATION}"/ >> $OUTFILENAME
 ### Refer: http://www.linuxquestions.org/questions/programming-9 \
 ###        /sed-doesn't-accept-$variable-in-bash-script-325935/
 
