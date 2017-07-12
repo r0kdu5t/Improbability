@@ -3,11 +3,11 @@ Improbability - TESTING
 
 ### *Board Connection Table*
 
-|| __Function_> ||RX|TX|INT0|INT1|4|PWM|PWM|7|8|PWM|SS|MOSI|MISO|||||SDA|SCL|
+|_| __Function_> |_|RX|TX|INT0|INT1|4|PWM|PWM|7|8|PWM|SS|MOSI|MISO|_|_|_|_|SDA|SCL|
 |----|----------|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+<!--
 || Digital pins ||0|1|2|3|4|5|6|7|8|9|10|11|12|13|(14)|(15)|(16)|(17)|(18)|(19)|
 | Analogue pins || | | | | | | | | | |  |  |  |0|1|2|3|4|5|
-<!--
 | pButton | PushButton ||||X||||||||||||||||||
 | oneWire | DS18B20 temperature sensor(s) ||0|1|2|3|4|X|6|7|8|9|10|11|12|13|(14)|(15)|(16)|(17)|(18)|(19)|
 | SSR_PIN | Control output ||0|1|2|3|4|5|X|7|8|9|10|11|12|13|(14)|(15)|(16)|(17)|(18)|(19)|
