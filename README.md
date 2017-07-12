@@ -1,9 +1,8 @@
 Improbability - TESTING
 =======================
 
-### *Board Connection Table*
+First Header | Second Header
+------------ | -------------
+Content from cell 1 | Content from cell 2
+Content in the first column | Content in the second column
 
-| | Function_> | |RX|TX|INT0|INT1|4|PWM|PWM|7|8|PWM|SS|MOSI|MISO| | | | |SDA|SCL|
-|----|----------|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| | Digital pins | |0|1|2|3|4|5|6|7|8|9|10|11|12|13|(14)|(15)|(16)|(17)|(18)|(19)|
-| Analogue pins | | | | | | | | | | | |  |  |  |0|1|2|3|4|5|
