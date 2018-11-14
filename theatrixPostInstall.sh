@@ -88,7 +88,7 @@ bravoClickMeFirst() {
             if [[ -d "${PUBLICSHARE}" ]] ; then
                 #echo "true"
                 echo "Removing local Public folder and creating link to shared Public folder."
-                #rm -rf Public && ln -s /home/shared Public
+                rm -rf Public && ln -s /home/shared Public
                 zenity --info --title="Public Folder Access" --text="Changes have been applied.\n\n$USER now can access to Public Shared folder."
             else
                 #echo "false"
@@ -146,7 +146,7 @@ deltaDealWithUsers() {
         user="$(echo $( cut -d ' ' -f 1 <<< "$name" ) | tr '[A-Z]' '[a-z]')"
         echo "This will be the user name : $user" | write_log
         echo "Fullname : $name, Username : $user"
-        #sudo useradd -m $user -G users -d /home/$user -s /bin/bash -c $name -p `echo "$pass" | mkpasswd -s`
+        sudo useradd -m -G users -d /home/$user -s /bin/bash -c "$name" -p $(mkpasswd "$pass") $user
         echo "$name,$user,$pass" >> $OUTFILE
         echo "Added: $user,$name" | write_log
         #
@@ -194,10 +194,10 @@ if [ $tDEBUG ]; then
    #
 fi
 
-#alphaDesktop
-#bravoClickMeFirst
+alphaDesktop
+bravoClickMeFirst
 #charlieUserNames
-#deltaDealWithUsers
+deltaDealWithUsers
 
 if [ tDEBUG ]; then
    echo "LOG_FILE    : $LOG_FILE"
